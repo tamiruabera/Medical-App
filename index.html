@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Ethio ANC — Antenatal Care Companion</title>
+<meta name="theme-color" content="#0B6E4F"/>
+<meta name="description" content="Antenatal care calculator and clinical reference"/>
+<!-- PWA / APK packaging setup -->
+<link rel="canonical" href="./" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Ethio ANC" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   ETHIO ANC — Material Design 3 inspired token system
+   Palette derived from the Ethiopian flag re-expressed as MD3 tonal surfaces.
+   ============================================================ */
+:root{
+  --md-primary:#0B6E4F; --md-primary-dark:#095c42; --md-on-primary:#FFFFFF;
+  --md-primary-container:#CFF5E1; --md-on-primary-container:#00341F;
+  --md-secondary:#3454D1; --md-secondary-container:#DCE4FF; --md-on-secondary-container:#0B2966;
+  --md-tertiary:#8A6100; --md-tertiary-container:#FFE8AE; --md-on-tertiary-container:#2B1D00;
+  --md-purple:#7C3AED; --md-purple-container:#EDE3FF; --md-on-purple-container:#2C0E70;
+  --md-error:#B3261E; --md-error-container:#FFDAD4; --md-on-error-container:#410E0B;
+  --md-surface:#FBFAF6; --md-surface-1:#F5F3EC; --md-surface-2:#EDEBE0;
+  --md-surface-container:#FFFFFF; --md-outline:#DCD8CB; --md-outline-strong:#8C887C;
+  --md-on-surface:#191A15; --md-on-surface-variant:#49483E;
+  --grad-primary:linear-gradient(135deg,#0B6E4F 0%,#0E8C63 55%,#12A876 100%);
+  --grad-secondary:linear-gradient(135deg,#3454D1 0%,#5B7CF0 100%);
+  --grad-gold:linear-gradient(135deg,#C79000 0%,#E8B93A 100%);
+  --grad-purple:linear-gradient(135deg,#6D28D9 0%,#9061F9 100%);
+  --grad-error:linear-gradient(135deg,#B3261E 0%,#DC4C41 100%);
+  --grad-mesh:radial-gradient(circle at 12% 8%, rgba(16,140,99,.10), transparent 42%),
+              radial-gradient(circle at 88% 4%, rgba(52,84,209,.09), transparent 40%),
+              radial-gradient(circle at 92% 60%, rgba(124,58,237,.06), transparent 45%);
+  --radius-sm:12px; --radius-md:16px; --radius-lg:20px; --radius-xl:28px;
+  --e1:0 1px 2px rgba(20,30,20,.05), 0 1px 3px rgba(20,30,20,.07);
+  --e2:0 3px 8px rgba(20,30,20,.07), 0 6px 16px rgba(20,30,20,.06);
+  --e3:0 12px 32px rgba(15,25,20,.16), 0 4px 12px rgba(15,25,20,.08);
+  --glow-primary:0 0 0 1px rgba(11,110,79,.08), 0 6px 20px -4px rgba(11,110,79,.28);
+  --glass-bg:rgba(255,255,255,.62);
+  --glass-border:rgba(255,255,255,.5);
+  --font-display:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans Ethiopic',sans-serif;
+  --dur-fast:.15s; --dur-med:.28s; --ease-out:cubic-bezier(.2,.8,.3,1);
+}
+[data-theme="dark"]{
+  --md-surface:#0E100D; --md-surface-1:#161810; --md-surface-2:#1E2117;
+  --md-surface-container:#191B14; --md-outline:#33362A; --md-outline-strong:#5C5F4F;
+  --md-on-surface:#EAE9DE; --md-on-surface-variant:#C7C6BA;
+  --md-primary:#4FDDA0; --md-on-primary:#00281A; --md-primary-container:#0E4A34; --md-on-primary-container:#B9F5D6;
+  --md-secondary:#AEBFFF; --md-secondary-container:#22337A; --md-on-secondary-container:#DCE4FF;
+  --md-tertiary:#F0C25E; --md-tertiary-container:#4A3800; --md-on-tertiary-container:#FFE8AE;
+  --md-purple:#C4A2FF; --md-purple-container:#3E2277; --md-on-purple-container:#EDE3FF;
+  --md-error:#FFB4A9; --md-error-container:#5F1712; --md-on-error-container:#FFDAD4;
+  --grad-primary:linear-gradient(135deg,#0E4A34 0%,#12A876 100%);
+  --grad-secondary:linear-gradient(135deg,#22337A 0%,#3454D1 100%);
+  --grad-mesh:radial-gradient(circle at 12% 8%, rgba(79,221,160,.07), transparent 42%),
+              radial-gradient(circle at 88% 4%, rgba(174,191,255,.06), transparent 40%),
+              radial-gradient(circle at 92% 60%, rgba(196,162,255,.05), transparent 45%);
+  --e1:0 1px 2px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.24);
+  --e2:0 3px 10px rgba(0,0,0,.34), 0 6px 18px rgba(0,0,0,.24);
+  --e3:0 14px 36px rgba(0,0,0,.5), 0 4px 14px rgba(0,0,0,.34);
+  --glow-primary:0 0 0 1px rgba(79,221,160,.12), 0 6px 22px -4px rgba(79,221,160,.32);
+  --glass-bg:rgba(25,27,20,.6);
+  --glass-border:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0;background:var(--md-surface);color:var(--md-on-surface);font-family:var(--font-body);}
+body{font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:86px;transition:background .3s,color .3s;background-image:var(--grad-mesh);background-attachment:fixed}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;letter-spacing:-.015em;margin:0 0 6px}
+a{color:var(--md-secondary)}
+.wrap{max-width:920px;margin:0 auto;padding:0 14px 24px}
+.hidden{display:none!important}
+svg.icon{width:1.25em;height:1.25em;fill:currentColor;flex:0 0 auto;vertical-align:-.2em;transition:fill var(--dur-fast), stroke var(--dur-fast)}
+button{font-family:inherit}
+:focus-visible{outline:2.5px solid var(--md-secondary);outline-offset:2px;border-radius:8px}
+.btn:focus-visible, .icon-btn:focus-visible, .fab:focus-visible, .chip:focus-visible { border-radius: inherit; }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* ---------- App bar ---------- */
+:root{ --appbar-start:#0E8C63; --appbar-mid:#2E8FD9; --appbar-end:#3454D1; }
+[data-theme="dark"]{ --appbar-start:#0A4D37; --appbar-mid:#144E76; --appbar-end:#1E2E70; }
+.appbar{position:relative;overflow:hidden;isolation:isolate;top:0;z-index:40;background:linear-gradient(120deg,var(--appbar-start) 0%,var(--appbar-mid) 55%,var(--appbar-end) 100%);color:var(--md-on-primary);padding:14px 16px 18px;box-shadow:var(--e2)}
+.appbar::before{content:"";position:absolute;inset:0;z-index:0;opacity:.16;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='90' viewBox='0 0 400 90'%3E%3Cpolyline points='0,45 60,45 78,45 88,12 100,78 112,45 400,45' fill='none' stroke='white' stroke-width='2.4' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:repeat-x;background-size:400px 90px;background-position:0 bottom;}
+.appbar::after{content:"";position:absolute;top:-60%;right:-10%;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);z-index:0;pointer-events:none}
+.appbar-row{position:relative;z-index:1;display:flex;align-items:center;gap:10px;max-width:920px;margin:0 auto}
+.appbar-logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(79,221,160,.55),rgba(11,110,79,.35));backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.appbar-title{flex:1;min-width:0}
+.appbar-title h1{font-size:18.5px;color:#fff;margin:0;line-height:1.15}
+.appbar-title .sub{font-size:11.5px;opacity:.88;margin-top:1px}
+.appbar-actions{display:flex;gap:8px}
+.icon-btn{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);background:rgba(255,255,255,.16);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background var(--dur-fast),transform var(--dur-fast) var(--ease-out),box-shadow var(--dur-fast);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.icon-btn svg{width:22px;height:22px;fill:#fff;stroke:none}
+.icon-btn:hover{background:rgba(255,255,255,.32);box-shadow:0 4px 12px rgba(0,0,0,.22);transform:translateY(-2px)}
+.icon-btn:active{transform:scale(.92)}
+#themeToggle{background:linear-gradient(135deg,rgba(240,194,94,.85),rgba(199,144,0,.75));border-color:rgba(255,224,150,.6)}
+#themeToggle:hover{background:linear-gradient(135deg,rgba(240,194,94,1),rgba(199,144,0,.9))}
+#printBtn{background:linear-gradient(135deg,rgba(174,191,255,.8),rgba(52,84,209,.7));border-color:rgba(210,220,255,.6)}
+#printBtn:hover{background:linear-gradient(135deg,rgba(174,191,255,.95),rgba(52,84,209,.85))}
+#aboutBtn{background:linear-gradient(135deg,rgba(196,162,255,.82),rgba(124,58,237,.72));border-color:rgba(220,200,255,.6)}
+#aboutBtn:hover{background:linear-gradient(135deg,rgba(196,162,255,.97),rgba(124,58,237,.87))}
+.appbar-search{position:relative;z-index:1;margin-top:14px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:10px 16px;backdrop-filter:blur(4px);transition:background var(--dur-fast)}
+.appbar-search:focus-within{background:rgba(255,255,255,.22)}
+.appbar-search input{flex:1;background:transparent;border:none;color:#fff;font-size:14px;outline:none}
+.appbar-search input::placeholder{color:rgba(255,255,255,.75)}
+.appbar-search svg{fill:rgba(255,255,255,.85)}
+
+/* ---------- Section headers ---------- */
+.section-head{display:flex;align-items:center;gap:12px;margin:26px 2px 12px;animation:fadeUp .4s var(--ease-out) both}
+.section-head .dot{width:40px;height:40px;border-radius:12px;background:var(--md-primary-container);color:var(--md-on-primary-container);display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:var(--e1);position:relative}
+.section-head .dot svg{width:22px;height:22px}
+.section-head h2{font-size:16.5px;margin:0;color:var(--md-on-surface)}
+.section-head .cnt{font-size:12px;color:var(--md-on-surface-variant);margin-top:1px}
+
+/* ---------- Cards ---------- */
+.card{background:var(--md-surface-container);border:1px solid var(--md-outline);border-radius:var(--radius-lg);box-shadow:var(--e1);padding:17px;margin:12px 0;transition:box-shadow var(--dur-med) var(--ease-out),transform var(--dur-med) var(--ease-out),border-color var(--dur-fast);position:relative}
+.card:hover{box-shadow:var(--e2);transform:translateY(-2px);border-color:var(--md-outline-strong)}
+.card.tight{padding:14px}
+.card.tight:hover{transform:none;box-shadow:var(--e1)}
+.card.elevated{box-shadow:var(--e2);background:linear-gradient(180deg,var(--md-surface-container),var(--md-surface-container)) padding-box, var(--grad-primary) border-box;border:1.5px solid transparent}
+.card.elevated:hover{box-shadow:var(--e3)}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.card-header .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:var(--e1)}
+.card-header h3{font-size:15px;margin:0}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+
+/* ---------- Alert / callout boxes ---------- */
+.callout{border-radius:var(--radius-md);padding:14px 16px;margin:12px 0;display:flex;gap:12px;align-items:flex-start;border-left:4px solid transparent;transition:transform var(--dur-fast)}
+.callout .ic{flex:0 0 auto;margin-top:1px;width:24px;height:24px;padding:4px;border-radius:8px;box-sizing:content-box}
+.callout h4{margin:0 0 3px;font-size:14px;font-family:var(--font-display);font-weight:700}
+.callout p, .callout ul{margin:2px 0 0;font-size:13.5px}
+.callout.danger{background:var(--md-error-container);color:var(--md-on-error-container);border-left-color:var(--md-error)}
+.callout.danger .ic{background:rgba(179,38,30,.14)}
+.callout.warn{background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);border-left-color:var(--md-tertiary)}
+.callout.warn .ic{background:rgba(138,97,0,.14)}
+.callout.info{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-left-color:var(--md-secondary)}
+.callout.info .ic{background:rgba(52,84,209,.14)}
+.callout.pearl{background:var(--md-primary-container);color:var(--md-on-primary-container);border-left-color:var(--md-primary)}
+.callout.pearl .ic{background:rgba(11,110,79,.14)}
+.callout.note{background:var(--md-surface-2);color:var(--md-on-surface-variant);border-left-color:var(--md-outline-strong)}
+
+/* ---------- Buttons & chips ---------- */
+.btn{appearance:none;border:none;border-radius:999px;padding:10px 22px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--grad-primary);color:var(--md-on-primary);box-shadow:var(--glow-primary);transition:all var(--dur-fast) var(--ease-out);position:relative;overflow:hidden;isolation:isolate}
+.btn::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--rx,50%) var(--ry,50%),rgba(255,255,255,.35),transparent 60%);opacity:0;transition:opacity .3s}
+.btn:hover::after{opacity:1}
+.btn:hover{box-shadow:0 0 0 1px rgba(11,110,79,.1),0 10px 24px -6px rgba(11,110,79,.4);transform:translateY(-1.5px)}
+.btn:active{transform:scale(.97) translateY(0)}
+.btn.outline{background:transparent;border:1.5px solid var(--md-outline);color:var(--md-on-surface);box-shadow:none}
+.btn.outline:hover{border-color:var(--md-outline-strong);background:var(--md-surface-1)}
+.btn.tonal{background:var(--md-secondary-container);color:var(--md-on-secondary-container);box-shadow:none}
+.btn.tonal:hover{box-shadow:var(--e1);background:var(--md-secondary-container);filter:brightness(0.95)}
+.btn.danger{background:var(--grad-error);color:#fff}
+.btn.danger:hover{box-shadow:0 10px 24px -6px rgba(179,38,30,.4)}
+.btn.sm{padding:8px 16px;font-size:13px;gap:6px}
+.btn.full{width:100%}
+.chip{border:1px solid var(--md-outline);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;background:var(--md-surface-1);color:var(--md-on-surface-variant);cursor:pointer;white-space:nowrap;transition:all var(--dur-fast) var(--ease-out)}
+.chip:hover{border-color:var(--md-outline-strong);transform:translateY(-1px);background:var(--md-surface-2)}
+.chip.active{background:var(--grad-primary);color:var(--md-on-primary);border-color:transparent;box-shadow:var(--glow-primary)}
+.chip-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;-ms-overflow-style:none;scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.badge{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;background:var(--md-surface-2);color:var(--md-on-surface-variant);border:1px solid var(--md-outline)}
+.badge.on{background:var(--md-primary-container);color:var(--md-on-primary-container);border-color:transparent}
+
+/* ---------- Form fields ---------- */
+label{font-weight:700;font-size:13px;display:block;margin:10px 0 6px;color:var(--md-on-surface-variant)}
+input,select{width:100%;padding:12px 14px;border:1.5px solid var(--md-outline);border-radius:var(--radius-sm);background:var(--md-surface-1);color:var(--md-on-surface);font:inherit;font-size:14.5px;transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+input:focus,select:focus{outline:none;border-color:var(--md-primary);box-shadow:0 0 0 3px rgba(11,110,79,.14)}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1;min-width:130px}
+.ec-row{flex-wrap:nowrap}
+.ec-row .ec-d{flex:0 0 22%;min-width:64px}
+.ec-row .ec-m{flex:1 1 46%;min-width:120px}
+.ec-row .ec-y{flex:0 0 30%;min-width:90px}
+@media (max-width:400px){ .ec-row{flex-wrap:wrap} .ec-row .ec-d,.ec-row .ec-m,.ec-row .ec-y{flex:1 1 auto} }
+.hint{font-size:12.5px;color:var(--md-on-surface-variant);margin-top:6px}
+.error-text{color:var(--md-error);font-size:12.5px;margin-top:6px;font-weight:700}
+
+/* ---------- Mode tabs ---------- */
+.mode-tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;-ms-overflow-style:none;scrollbar-width:none}
+.mode-tabs::-webkit-scrollbar{display:none}
+.mode-tab{flex:0 0 auto;padding:10px 16px;border-radius:12px;border:1.5px solid var(--md-outline);background:var(--md-surface-1);font-weight:700;font-size:13px;color:var(--md-on-surface-variant);cursor:pointer;transition:all var(--dur-fast) var(--ease-out)}
+.mode-tab:hover{border-color:var(--md-outline-strong);background:var(--md-surface-2)}
+.mode-tab.active{background:var(--grad-primary);color:var(--md-on-primary);border-color:transparent;box-shadow:var(--glow-primary)}
+
+/* ---------- KPI results ---------- */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.kpi{background:var(--md-surface-1);border-radius:var(--radius-md);padding:14px 16px;border:1px solid var(--md-outline);position:relative;overflow:hidden;transition:transform var(--dur-fast) var(--ease-out),box-shadow var(--dur-fast)}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad-primary)}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--e1)}
+.kpi .lbl{font-size:11.5px;font-weight:800;color:var(--md-on-surface-variant);text-transform:uppercase;letter-spacing:.05em}
+.kpi .val{font-size:22px;font-weight:800;font-family:var(--font-display);margin-top:4px;letter-spacing:-.01em}
+.kpi .sub{font-size:12px;color:var(--md-on-surface-variant);margin-top:4px}
+
+/* ---------- Tables ---------- */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius-md);border:1px solid var(--md-outline)}
+table.ref{width:100%;border-collapse:collapse;font-size:13.5px;min-width:440px}
+table.ref th{background:var(--md-surface-2);text-align:left;padding:12px 14px;font-weight:800;color:var(--md-on-surface-variant);position:sticky;top:0;font-family:var(--font-display);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+table.ref td{padding:12px 14px;border-top:1px solid var(--md-outline)}
+table.ref tr{transition:background var(--dur-fast)}
+table.ref tr:hover td{background:var(--md-surface-1)}
+
+/* ---------- Timeline ---------- */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:"";position:absolute;left:10px;top:4px;bottom:4px;width:2px;background:linear-gradient(var(--md-primary),var(--md-outline))}
+.tl-item{position:relative;padding-bottom:20px;font-size:14px}
+.tl-item::before{content:"";position:absolute;left:-27.5px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--grad-purple);border:3px solid var(--md-surface-container);box-shadow:0 0 0 2px var(--md-purple)}
+.tl-item b{color:var(--md-on-surface)}
+.tl-item .ref{font-size:12px;color:var(--md-on-surface-variant);display:block;margin-top:4px}
+
+/* ---------- Accordion ---------- */
+details.acc{border:1px solid var(--md-outline);border-radius:var(--radius-md);margin:10px 0;overflow:hidden;background:var(--md-surface-1);transition:box-shadow var(--dur-fast)}
+details.acc[open]{box-shadow:var(--e1)}
+details.acc>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:12px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary .chevron{margin-left:auto;display:flex;align-items:center;transition:transform var(--dur-med) var(--ease-out)}
+details.acc[open]>summary .chevron{transform:rotate(180deg)}
+details.acc .acc-body{padding:0 16px 16px;font-size:14px;animation:fadeUp var(--dur-med) var(--ease-out)}
+details.acc .acc-body ul{margin:8px 0;padding-left:22px}
+details.acc .acc-body li{margin:6px 0}
+
+/* ---------- Bottom navigation ---------- */
+.bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--glass-bg);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border-top:1px solid var(--glass-border);display:flex;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px 8px;border:none;background:none;color:var(--md-on-surface-variant);cursor:pointer;font-size:11px;font-weight:700;transition:color var(--dur-fast)}
+.nav-item svg{width:22px;height:22px;fill:currentColor}
+.nav-item.active{color:var(--md-primary)}
+.nav-item.active .icon-wrap{background:var(--md-primary-container);border-radius:16px;box-shadow:var(--e1)}
+.icon-wrap{padding:4px 18px;display:flex;border-radius:16px;transition:background var(--dur-med) var(--ease-out),box-shadow var(--dur-med),transform var(--dur-fast) var(--ease-out)}
+.nav-item:active .icon-wrap{transform:scale(.9)}
+
+/* ---------- Screens ---------- */
+.screen{display:none;animation:fadeUp .35s var(--ease-out)}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(179,38,30,.45),var(--e2)}50%{box-shadow:0 0 0 9px rgba(179,38,30,0),var(--e2)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ---------- FAB ---------- */
+.fab-stack{position:fixed;right:16px;bottom:94px;z-index:45;display:flex;flex-direction:column;gap:12px;align-items:flex-end}
+.fab{border:none;border-radius:16px;display:flex;align-items:center;gap:10px;padding:14px 20px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--e3);color:#fff;transition:transform var(--dur-fast) var(--ease-out),box-shadow var(--dur-fast)}
+.fab.emergency{background:var(--grad-error);animation:pulseGlow 2.6s ease-in-out infinite}
+.fab:hover{transform:translateY(-2.5px) scale(1.02)}
+.fab:active{transform:scale(.95)}
+.fab svg{width:20px;height:20px;fill:currentColor}
+
+/* ---------- Sheet / dialog ---------- */
+.sheet-overlay{position:fixed;inset:0;background:rgba(10,14,10,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity var(--dur-med)}
+.sheet-overlay.open{opacity:1;pointer-events:auto}
+.sheet{background:var(--md-surface-container);border-radius:26px 26px 0 0;max-width:640px;width:100%;max-height:88vh;overflow:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.9,.3,1);box-shadow:var(--e3);position:relative}
+.sheet::before{content:"";position:sticky;top:8px;display:block;width:42px;height:4.5px;border-radius:99px;background:var(--md-outline-strong);margin:0 auto;opacity:.6}
+.sheet-overlay.open .sheet{transform:translateY(0)}
+@media (min-width:720px){ .sheet-overlay{align-items:center} .sheet{border-radius:24px;max-height:82vh} .sheet::before{display:none} }
+.sheet-head{display:flex;align-items:center;gap:12px;padding:12px 20px 10px;position:sticky;top:0;background:var(--md-surface-container)}
+.sheet-head h3{margin:0;font-size:16.5px;font-family:var(--font-display)}
+.sheet-head .kicker{font-size:12px;color:var(--md-on-surface-variant);display:block;margin-top:2px}
+.sheet-body{padding:8px 20px 20px}
+.sheet-actions{display:flex;gap:10px;padding:0 20px 20px;flex-wrap:wrap;justify-content:flex-end}
+.sheet-close{margin-left:auto;background:var(--md-surface-2);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--md-on-surface);transition:background var(--dur-fast),transform var(--dur-fast)}
+.sheet-close:hover{background:var(--md-outline);transform:rotate(90deg)}
+
+/* ---------- scroll progress + back-to-top ---------- */
+#scrollProgress{position:fixed;top:0;left:0;height:4px;background:var(--grad-gold);z-index:60;width:0%;transition:width .1s;box-shadow:0 0 8px rgba(199,144,0,.5)}
+#backToTop{position:fixed;right:16px;bottom:156px;z-index:44;width:42px;height:42px;border-radius:50%;border:none;background:var(--md-surface-container);box-shadow:var(--e2);color:var(--md-on-surface);opacity:0;pointer-events:none;transition:opacity var(--dur-fast),transform var(--dur-fast) var(--ease-out);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+#backToTop.show{opacity:1;pointer-events:auto}
+#backToTop:hover{transform:translateY(-3px);box-shadow:var(--e3)}
+
+/* ---------- misc ---------- */
+.muted{color:var(--md-on-surface-variant)}
+.small{font-size:13px}
+.divider{height:1.5px;background:linear-gradient(90deg,var(--md-outline),transparent);margin:16px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two-col{grid-template-columns:1fr}}
+.center{text-align:center}
+.ref-list{font-size:12.5px;color:var(--md-on-surface-variant);padding-left:20px}
+.ref-list li{margin:6px 0}
+.skeleton-note{font-size:12px;color:var(--md-on-surface-variant);font-style:italic}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--md-outline-strong);border-radius:8px}
+@media print{
+  .appbar,.bottomnav,.fab-stack,#backToTop,#scrollProgress,.sheet-overlay{display:none!important}
+  .screen{display:block!important}
+  .card{box-shadow:none;border:1px solid #999}
+}
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+<symbol id="ic-home" viewBox="0 0 24 24"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-6.7c0-.38-.21-.71-.53-.88l-5.47-3.11c-.62-.35-1.38-.35-2 0L5.53 10.42c-.32.18-.53.5-.53.88V19c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/></symbol>
+<symbol id="ic-calc" viewBox="0 0 24 24"><path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4 17h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zM9 19H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm8-5H7V4h10v2z"/></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><path d="M19 4h-1V3c0-.55-.45-1-1-1s-1 .45-1 1v1H8V3c0-.55-.45-1-1-1s-1 .45-1 1v1H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></symbol>
+<symbol id="ic-alert" viewBox="0 0 24 24"><path d="M12 2.26a2.5 2.5 0 0 1 2.15 1.22l9.36 15.6a2.5 2.5 0 0 1-2.15 3.78H2.64a2.5 2.5 0 0 1-2.15-3.78L9.85 3.48A2.5 2.5 0 0 1 12 2.26zm1 14.74v-2h-2v2h2zm0-4v-5h-2v5h2z"/></symbol>
+<symbol id="ic-baby" viewBox="0 0 24 24"><path d="M11.5 2c-1.5 0-2.85.9-3.3 2.27A7.53 7.53 0 0 0 5 11.5v3c0 1.24 1.01 2.25 2.25 2.25h1.15a3.75 3.75 0 0 0 7.2 0h1.15c1.24 0 2.25-1.01 2.25-2.25v-3c0-3.3-2.05-6.13-5-7.23A3.5 3.5 0 0 0 11.5 2zM9 11.5A1.5 1.5 0 0 1 10.5 10a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 10.5 13 1.5 1.5 0 0 1 9 11.5zm3.5 0A1.5 1.5 0 0 1 14 10a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 14 13a1.5 1.5 0 0 1-1.5-1.5zM12 22a4 4 0 0 0 4-4H8a4 4 0 0 0 4 4z"/></symbol>
+<symbol id="ic-pregnant" viewBox="0 0 24 24"><path d="M9 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm7 9c-.01-1.34-.83-2.51-2-3 0-1.66-1.34-3-3-3s-3 1.34-3 3v7h2v5h3v-5h3v-4z"/></symbol>
+<symbol id="ic-pill" viewBox="0 0 24 24"><path d="M21 5h-2.64l1.14-3.14a.5.5 0 0 0-.47-.67H5.97c-.32 0-.57.29-.47.67L6.64 5H4c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-3 9h-3v3c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-3H8c-.55 0-1-.45-1-1v-2c0-.55.45-1 1-1h3V8c0-.55.45-1 1-1h2c.55 0 1 .45 1 1v3h3c.55 0 1 .45 1 1v2c0 .55-.45 1-1 1z"/></symbol>
+<symbol id="ic-syringe" viewBox="0 0 24 24"><path d="M5.5 18H4V9h1.5v9zm1.5-9v9c0 1.1-.9 2-2 2H3.5c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2H5c0-1.42 1.15-2.58 2.58-2.58h1.83l-2.12-2.12 1.41-1.41L13.2 5.38c.39.39.39 1.02 0 1.41l-1.41 1.41 1.41 1.41 2.83-2.83 1.41 1.41L11.78 13.9 15 17.12V19h4v2H9v-3.88l2.12-2.12-4.12-4.12-1.41 1.41 1.41 1.41v.3z"/></symbol>
+<symbol id="ic-flask" viewBox="0 0 24 24"><path d="M19.8 16.51L15 8.35V3h1c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1h1v5.35L4.2 16.51A2.99 2.99 0 0 0 6.79 21h10.41c2.14 0 3.32-2.45 2.6-4.49zM9 4h6v4.35l-1.38 2.37-3.23-3.23-1.39 2.37zm7.39 15H7.61L12 11.45l4.39 7.55z"/></symbol>
+<symbol id="ic-book" viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zM21 18.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></symbol>
+<symbol id="ic-info" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></symbol>
+<symbol id="ic-chevron" viewBox="0 0 24 24"><path d="M15.88 9.29L12 13.17 8.12 9.29a.996.996 0 1 0-1.41 1.41l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41c-.39-.38-1.03-.39-1.42 0z"/></symbol>
+<symbol id="ic-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></symbol>
+<symbol id="ic-print" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></symbol>
+<symbol id="ic-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+<symbol id="ic-note" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+<symbol id="ic-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></symbol>
+<symbol id="ic-bp" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+<symbol id="ic-sun" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></symbol>
+<symbol id="ic-moon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></symbol>
+<symbol id="ic-emergency" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm6 11h-3v3h-2v-3H8v-2h3v-3h2v3h3v2z"/></symbol>
+<symbol id="ic-lab" viewBox="0 0 24 24"><path d="M10.5 4.5c.28 0 .5.22.5.5v2h6V5c0-.28.22-.5.5-.5s.5.22.5.5v3.13l-4 4.2V19h3c.55 0 1 .45 1 1s-.45 1-1 1h-8c-.55 0-1-.45-1-1s.45-1 1-1h3v-6.67l-4-4.2V5c0-.28.22-.5.5-.5s.5.22.5.5zM12 11.23l2-2.1V7h-4v2.13l2 2.1z"/><circle cx="7" cy="14" r="2"/><circle cx="6" cy="18" r="1"/><circle cx="18" cy="15" r="1"/></symbol>
+</svg>
+<script>function ic(id){return '<svg class="icon"><use href="#'+id+'"/></svg>'}</script>
+
+<div id="scrollProgress"></div>
+
+<header class="appbar">
+  <div class="appbar-row">
+    <div class="appbar-logo"><svg viewBox="0 0 24 24" style="fill:#FF7AA8;width:24px;height:24px"><use href="#ic-pregnant"/></svg></div>
+    <div class="appbar-title">
+      <h1>Ethio ANC</h1>
+      <div class="sub">Antenatal care companion &middot; v2.0 clinical edition</div>
+    </div>
+    <div class="appbar-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" id="themeIcon"><use href="#ic-moon"/></svg></button>
+      <button class="icon-btn" id="printBtn" title="Print / Save PDF" aria-label="Print"><svg viewBox="0 0 24 24"><use href="#ic-print"/></svg></button>
+      <button class="icon-btn" id="aboutBtn" title="About" aria-label="About"><svg viewBox="0 0 24 24"><use href="#ic-info"/></svg></button>
+    </div>
+  </div>
+  <div class="appbar-search">
+    <svg class="icon" viewBox="0 0 24 24" style="width:20px;height:20px"><use href="#ic-search"/></svg>
+    <input id="quickSearch" placeholder="Search: danger signs, MgSO4, GDM, aspirin..." autocomplete="off"/>
+  </div>
+</header>
+
+<div class="wrap" id="mainWrap">
+
+<section class="screen active" id="screen-calc" data-searchtext="calculator gestational age GA EDD LMP ultrasound CRL BPD dating naegele">
+
+  <div class="section-head"><div class="dot"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-calc"/></svg></div><div><h2>Dating calculator</h2><div class="cnt">GA &middot; EDD &middot; trimester &middot; WHO contact schedule</div></div></div>
+
+  <div class="card elevated">
+    <div class="mode-tabs" role="tablist" aria-label="Calculator modes">
+      <button class="mode-tab active" data-mode="lmp">From LMP</button>
+      <button class="mode-tab" data-mode="edd">From known EDD</button>
+      <button class="mode-tab" data-mode="ga">From known GA</button>
+      <button class="mode-tab" data-mode="us">Ultrasound (CRL/BPD)</button>
+    </div>
+
+    <label>Input calendar</label>
+    <select id="calendarMode">
+      <option value="ethi" selected>Ethiopian (E.C.)</option>
+      <option value="greg">Gregorian</option>
+    </select>
+    <div class="hint" id="noteEc">Enter the Ethiopian date directly &mdash; Day / Month / Year (E.C.), just like a Gregorian date field. Results always show both calendars.</div>
+
+    <div class="modeBox" id="lmpBox">
+      <label>Last menstrual period (LMP)</label>
+      <div class="row" id="lmpGreg" style="display:none"><input id="lmpG" type="date"/></div>
+      <div class="row ec-row" id="lmpEthi">
+        <input id="lmpEcD" type="number" min="1" max="30" placeholder="Day" class="ec-d"/>
+        <select id="lmpEcM" class="ec-m"></select>
+        <input id="lmpEcY" type="number" min="1900" max="2100" placeholder="Year (E.C.)" class="ec-y"/>
+      </div>
+      <div class="hint" id="lmpEcOut">&mdash;</div>
+      <div class="error-text" id="lmpErr" style="display:none"></div>
+    </div>
+
+    <div class="modeBox hidden" id="eddBox">
+      <label>Known Estimated Due Date (EDD)</label>
+      <div class="row" id="eddGreg" style="display:none"><input id="eddG" type="date"/></div>
+      <div class="row ec-row" id="eddEthi">
+        <input id="eddEcD" type="number" min="1" max="30" placeholder="Day" class="ec-d"/>
+        <select id="eddEcM" class="ec-m"></select>
+        <input id="eddEcY" type="number" min="1900" max="2100" placeholder="Year (E.C.)" class="ec-y"/>
+      </div>
+      <div class="hint" id="eddEcOut">&mdash;</div>
+      <div class="error-text" id="eddErr" style="display:none"></div>
+    </div>
+
+    <div class="modeBox hidden" id="gaBox">
+      <label>Known gestational age on assessment date</label>
+      <div class="row">
+        <input id="gaWeeks" type="number" min="0" max="45" placeholder="Weeks"/>
+        <input id="gaDays" type="number" min="0" max="6" placeholder="Days"/>
+      </div>
+      <div class="row" id="gaGreg" style="display:none"><input id="gaDateG" type="date"/></div>
+      <div class="row ec-row" id="gaEthi">
+        <input id="gaEcD" type="number" min="1" max="30" placeholder="Day" class="ec-d"/>
+        <select id="gaEcM" class="ec-m"></select>
+        <input id="gaEcY" type="number" min="1900" max="2100" placeholder="Year (E.C.)" class="ec-y"/>
+      </div>
+      <div class="hint" id="gaEcOut">&mdash;</div>
+      <div class="error-text" id="gaErr" style="display:none"></div>
+    </div>
+
+    <div class="modeBox hidden" id="usBox">
+      <label>Ultrasound biometry</label>
+      <div class="two-col">
+        <div><label style="margin-top:0">CRL (mm)</label><input id="crlMm" type="number" min="1" max="100" placeholder="e.g. 55"/><div class="hint">Robinson &amp; Fleming &mdash; most accurate 6&ndash;13+6w</div></div>
+        <div><label style="margin-top:0">BPD (mm)</label><input id="bpdMm" type="number" min="10" max="110" placeholder="e.g. 46"/><div class="hint">Mean BPD curve &mdash; best mid-trimester</div></div>
+      </div>
+      <div class="row" id="measGreg" style="display:none"><input id="measG" type="date"/></div>
+      <div class="row ec-row" id="measEthi">
+        <input id="measEcD" type="number" min="1" max="30" placeholder="Day" class="ec-d"/>
+        <select id="measEcM" class="ec-m"></select>
+        <input id="measEcY" type="number" min="1900" max="2100" placeholder="Year (E.C.)" class="ec-y"/>
+      </div>
+      <div class="hint" id="measEcOut">&mdash;</div>
+      <div class="error-text" id="usErr" style="display:none"></div>
+      <button class="btn tonal sm" id="usInfoBtn" type="button" style="margin-top:10px">Redating thresholds (ACOG)</button>
+    </div>
+
+    <div class="row" style="margin-top:18px">
+      <button class="btn full" id="calcBtn"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-check"/></svg>Calculate</button>
+      <button class="btn outline full" id="resetBtn"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-close"/></svg>Reset</button>
+    </div>
+  </div>
+
+  <div class="card elevated hidden" id="outputs">
+    <div class="card-header"><div class="ic" style="background:var(--md-primary-container);color:var(--md-on-primary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-check"/></svg></div><h3>Results</h3></div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="lbl">Gestational age (today)</div><div class="val" id="gaToday">&mdash;</div><div class="sub" id="gaAnchor"></div></div>
+      <div class="kpi"><div class="lbl">EDD</div><div class="val" id="eddOut">&mdash;</div><div class="sub" id="eddOutEthi"></div></div>
+      <div class="kpi"><div class="lbl">Trimester</div><div class="val" id="trimester">&mdash;</div><div class="sub">1st 0&ndash;13+6 &middot; 2nd 14&ndash;27+6 &middot; 3rd 28&ndash;40+</div></div>
+      <div class="kpi"><div class="lbl">Weeks completed</div><div class="val" id="weeksCompleted">&mdash;</div><div class="sub">Days since LMP &divide; 7</div></div>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <strong style="font-size:14px">WHO 8-contact schedule</strong>
+      <span class="badge">Weeks 12&middot;20&middot;26&middot;30&middot;34&middot;36&middot;38&middot;40</span>
+    </div>
+    <div id="schedule"></div>
+  </div>
+
+  <div class="callout pearl">
+    <svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-star"/></svg>
+    <div><h4>Exam pearl</h4><p>Naegele's rule (LMP + 280 days) assumes a regular 28-day cycle with ovulation on day 14. First-trimester CRL is the single most accurate dating method and should generally take precedence over LMP-based dating when the discrepancy exceeds guideline thresholds (ACOG Committee Opinion 700 / SMFM 2017).</p></div>
+  </div>
+
+</section>
+
+<section class="screen" id="screen-contacts" data-searchtext="WHO contacts ANC C1 C2 C3 C4 C5 C6 C7 C8 iron folate calcium aspirin tetanus IPTp malaria GDM anti-D">
+  <div class="section-head"><div class="dot" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-calendar"/></svg></div><div><h2>WHO 8-contact ANC schedule</h2><div class="cnt">WHO ANC 2016 &middot; Ethiopia FMOH protocol</div></div></div>
+
+  <div class="callout info">
+    <svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-info"/></svg>
+    <div><h4>Why 8 contacts, not 4?</h4><p>The 2016 WHO model replaced the older 4-visit Focused ANC package after evidence linked more contacts to fewer stillbirths and greater maternal satisfaction, without proven harm. "Contact" is used deliberately instead of "visit" to emphasize active clinician&ndash;woman engagement.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="chip-row" id="contactChips" role="tablist" aria-label="ANC contacts">
+      <button class="chip active" data-c="c1">C1 &middot; &le;12w</button>
+      <button class="chip" data-c="c2">C2 &middot; 20w</button>
+      <button class="chip" data-c="c3">C3 &middot; 26w</button>
+      <button class="chip" data-c="c4">C4 &middot; 30w</button>
+      <button class="chip" data-c="c5">C5 &middot; 34w</button>
+      <button class="chip" data-c="c6">C6 &middot; 36w</button>
+      <button class="chip" data-c="c7">C7 &middot; 38w</button>
+      <button class="chip" data-c="c8">C8 &middot; 40w</button>
+    </div>
+    <div id="contactDetail" style="margin-top:14px" aria-live="polite"></div>
+  </div>
+
+  <div class="section-head"><div class="dot" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-pill"/></svg></div><div><h2>Supplementation &amp; prevention</h2><div class="cnt">Dosing reference across all contacts</div></div></div>
+
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="ref">
+        <thead><tr><th>Intervention</th><th>Dose / regimen</th><th>Timing</th><th>Guideline</th></tr></thead>
+        <tbody>
+          <tr><td>Iron + folic acid (IFA)</td><td>30&ndash;60 mg elemental iron + 0.4 mg folic acid, daily</td><td>Start at booking, continue through pregnancy; intermittent (weekly) IFA is an alternative where daily adherence/anemia prevalence is low</td><td>WHO ANC 2016</td></tr>
+          <tr><td>Calcium</td><td>1.5&ndash;2 g elemental calcium/day (divided doses, separate from iron)</td><td>From 20 weeks in populations with low dietary calcium intake</td><td>WHO 2018 update (pre-eclampsia prevention)</td></tr>
+          <tr><td>Low-dose aspirin</td><td>75&ndash;162 mg once daily (evening dosing favored)</td><td>Start 12&ndash;16 weeks (before 16w ideally) if &ge;1 high-risk or &ge;2 moderate-risk factor for pre-eclampsia; continue to delivery</td><td>ACOG / USPSTF 2021</td></tr>
+          <tr><td>Tetanus toxoid (TT)</td><td>TT1 at first contact if unimmunized &rarr; TT2 &ge;4 weeks later &rarr; TT3 &ge;6 months &rarr; TT4 &ge;1 yr &rarr; TT5 &ge;1 yr (lifelong protection after TT5)</td><td>Per national EPI schedule</td><td>WHO EPI</td></tr>
+          <tr><td>Deworming</td><td>Albendazole 400 mg or Mebendazole 500 mg, single dose</td><td>After the 1st trimester, in endemic areas</td><td>WHO</td></tr>
+          <tr><td>IPTp-SP (malaria)</td><td>Sulfadoxine-pyrimethamine, single clearance dose</td><td>Starting 13 weeks, doses &ge;4 weeks apart, at each scheduled contact, in moderate&ndash;high transmission areas</td><td>WHO malaria in pregnancy policy</td></tr>
+          <tr><td>Insecticide-treated net (ITN)</td><td>Provide/reinforce use</td><td>At booking, malaria-endemic areas</td><td>WHO</td></tr>
+          <tr><td>Anti-D immunoglobulin</td><td>300 mcg (1500 IU) IM</td><td>~28 weeks routinely if Rh(D)-negative &amp; unsensitized; repeat after any sensitizing event and postpartum if baby is Rh-positive</td><td>ACOG Practice Bulletin 181</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg>
+    <div><h4>High-yield distinction</h4><p>Folic acid dose for routine ANC prophylaxis is 0.4 mg/day &mdash; this is different from the 4&ndash;5 mg/day high dose used for women with a prior neural-tube-defect-affected pregnancy or on antiepileptics, which should start &ge;1 month pre-conception and continue through the first trimester.</p></div>
+  </div>
+</section>
+
+<section class="screen" id="screen-alerts" data-searchtext="danger signs bleeding headache convulsion fetal movement labs GDM OGTT gestational diabetes screening HIV syphilis anemia">
+  <div class="section-head"><div class="dot" style="background:var(--md-error-container);color:var(--md-on-error-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-alert"/></svg></div><div><h2>Danger signs &amp; screening</h2><div class="cnt">Patient-facing alerts + clinician lab workup</div></div></div>
+
+  <div class="card elevated">
+    <div class="card-header"><div class="ic" style="background:var(--md-error-container);color:var(--md-on-error-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-emergency"/></svg></div><h3 style="color:var(--md-error)">Danger signs in pregnancy &mdash; seek care immediately</h3></div>
+    <div class="grid-2">
+      <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.7">
+        <li>Vaginal bleeding, any amount</li>
+        <li>Severe headache with blurred vision</li>
+        <li>Convulsions / fits</li>
+        <li>Severe abdominal or epigastric pain</li>
+        <li>Fast or difficult breathing</li>
+      </ul>
+      <ul style="margin:0;padding-left:22px;font-size:14px;line-height:1.7">
+        <li>Fever</li>
+        <li>Severe or persistent vomiting</li>
+        <li>Reduced or absent fetal movements</li>
+        <li>Watery vaginal leakage (possible ruptured membranes)</li>
+        <li>Sudden swelling of face, hands, or legs</li>
+      </ul>
+    </div>
+    <p class="skeleton-note" style="margin-top:10px">Source: WHO ANC 2016 recommendations; adapted to Ethiopian FMOH ANC protocol patient-education materials.</p>
+  </div>
+
+  <div class="section-head"><div class="dot" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-lab"/></svg></div><div><h2>Booking-visit laboratory panel</h2></div></div>
+  <div class="card">
+    <div class="grid-2">
+      <div>
+        <b class="small">Universal</b>
+        <ul class="small" style="padding-left:20px">
+          <li>CBC / Hb (anemia screen)</li>
+          <li>Blood group &amp; Rh(D)</li>
+          <li>Urinalysis: protein, glucose, nitrites</li>
+          <li>HIV testing (opt-out, per national policy)</li>
+          <li>Syphilis: RPR/VDRL or point-of-care treponemal test</li>
+          <li>HBsAg per national policy</li>
+        </ul>
+      </div>
+      <div>
+        <b class="small">Risk-based / trimester-specific</b>
+        <ul class="small" style="padding-left:20px">
+          <li>75 g OGTT for GDM &mdash; universal or risk-based, 24&ndash;28 weeks</li>
+          <li>Recto-vaginal GBS swab &mdash; 36&ndash;37 weeks (where resources allow)</li>
+          <li>Repeat Hb &mdash; 3rd trimester</li>
+          <li>Malaria RDT/microscopy if febrile, endemic area</li>
+          <li>Urine culture if symptomatic or recurrent bacteriuria</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="ic" style="background:var(--md-primary-container);color:var(--md-on-primary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-flask"/></svg></div><h3>Gestational diabetes &mdash; diagnostic thresholds</h3></div>
+    <div class="tbl-wrap">
+      <table class="ref">
+        <thead><tr><th>Timepoint</th><th>IADPSG / WHO 2013 one-step (75 g OGTT)</th></tr></thead>
+        <tbody>
+          <tr><td>Fasting</td><td>&ge; 92 mg/dL (5.1 mmol/L)</td></tr>
+          <tr><td>1 hour</td><td>&ge; 180 mg/dL (10.0 mmol/L)</td></tr>
+          <tr><td>2 hour</td><td>&ge; 153 mg/dL (8.5 mmol/L)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:10px"><b>Any one</b> abnormal value is diagnostic. The two-step approach (50 g screen &rarr; 100 g diagnostic, Carpenter&ndash;Coustan criteria) remains an accepted alternative in some settings, including much of US practice (ACOG).</p>
+  </div>
+</section>
+
+<section class="screen" id="screen-milestones" data-searchtext="fetal milestones development quickening organogenesis viability">
+  <div class="section-head"><div class="dot" style="background:var(--md-purple-container);color:var(--md-on-purple-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-baby"/></svg></div><div><h2>Fetal development timeline</h2><div class="cnt">ACOG &middot; WHO &middot; RCOG</div></div></div>
+
+  <div class="card">
+    <div class="timeline">
+      <div class="tl-item"><b>Weeks 1&ndash;8 (1st trimester):</b> Foundational organogenesis; cardiac activity is typically detectable by transvaginal ultrasound around 6 weeks.<span class="ref">ACOG FAQ156</span></div>
+      <div class="tl-item"><b>Weeks 9&ndash;12:</b> Major organs and systems continue developing; early movement begins though not yet perceived by the mother.<span class="ref">ACOG FAQ156</span></div>
+      <div class="tl-item"><b>Weeks 13&ndash;16:</b> Skeletal ossification progresses; movements become more coordinated.<span class="ref">ACOG FAQ156</span></div>
+      <div class="tl-item"><b>Weeks 16&ndash;20:</b> Maternal perception of movement ("quickening") &mdash; usually 18&ndash;20 weeks in nulliparas, slightly earlier in multiparas.<span class="ref">RCOG patient information</span></div>
+      <div class="tl-item"><b>Weeks 18&ndash;22:</b> Detailed anomaly ultrasound window &mdash; fetal anatomic survey and dating/placental confirmation.<span class="ref">WHO ANC 2016; ISUOG practice guideline</span></div>
+      <div class="tl-item"><b>~23&ndash;24 weeks:</b> Conventional lower threshold of viability in many high-resource settings, with survival highly dependent on level of neonatal care available.<span class="ref">AAP/ACOG periviability consensus</span></div>
+      <div class="tl-item"><b>~28 weeks:</b> Cortical brain networks are still largely localized; reflex responses to stimuli become measurable.<span class="ref">RCOG Fetal Awareness review 2022</span></div>
+      <div class="tl-item"><b>~30+ weeks:</b> Long-range functional brain connectivity increases; sleep&ndash;wake organization of movement emerges.<span class="ref">RCOG Fetal Awareness review 2022</span></div>
+      <div class="tl-item"><b>Term (37&ndash;40+ weeks):</b> Fetal movement should continue through labor; any reduction should be reported promptly.<span class="ref">RCOG patient information</span></div>
+    </div>
+  </div>
+
+  <div class="card tight">
+    <b class="small">References</b>
+    <ol class="ref-list">
+      <li>ACOG. <em>How Your Fetus Grows During Pregnancy</em>, FAQ156.</li>
+      <li>WHO. <em>Recommendations on antenatal care for a positive pregnancy experience</em> (2016).</li>
+      <li>RCOG. <em>Fetal Awareness: Updated Review of Research and Recommendations for Practice</em> (2022).</li>
+    </ol>
+  </div>
+</section>
+
+<section class="screen" id="screen-hdp" data-searchtext="preeclampsia eclampsia hypertension HELLP magnesium sulfate MgSO4 labetalol nifedipine hydralazine severe features">
+  <div class="section-head"><div class="dot" style="background:var(--md-error-container);color:var(--md-on-error-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-bp"/></svg></div><div><h2>Hypertensive disorders of pregnancy</h2><div class="cnt">Definitions &middot; decision engine &middot; MgSO4 &middot; BP control</div></div></div>
+
+  <div class="card">
+    <div class="card-header"><div class="ic" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-book"/></svg></div><h3>Definitions (ACOG 2020 / ISSHP 2018)</h3></div>
+    <details class="acc" open>
+      <summary>Gestational hypertension <span class="chevron"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-chevron"/></svg></span></summary>
+      <div class="acc-body">SBP &ge;140 or DBP &ge;90 mmHg on two occasions &ge;4 h apart, after 20 weeks, in a previously normotensive woman, <b>without</b> proteinuria or severe features. Roughly 15&ndash;25% progress to pre-eclampsia.</div>
+    </details>
+    <details class="acc">
+      <summary>Pre-eclampsia <span class="chevron"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-chevron"/></svg></span></summary>
+      <div class="acc-body">Gestational hypertension <b>plus</b> new onset of any one of:
+        <ul>
+          <li>Proteinuria &ge;300 mg/24h, protein/creatinine ratio &ge;0.3, or dipstick 2+ if quantitative testing unavailable</li>
+          <li><i>or, in the absence of proteinuria:</i> thrombocytopenia (platelets &lt;100&times;10&sup9;/L), renal insufficiency (creatinine &gt;1.1 mg/dL or doubling of baseline), impaired liver function (transaminases &ge;2&times; normal), pulmonary edema, or new-onset headache/visual symptoms unresponsive to medication and not explained by an alternative diagnosis</li>
+        </ul>
+      </div>
+    </details>
+    <details class="acc">
+      <summary>Pre-eclampsia with severe features <span class="chevron"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-chevron"/></svg></span></summary>
+      <div class="acc-body">Any of: SBP &ge;160 or DBP &ge;110 mmHg (confirmed on repeat), platelets &lt;100&times;10&sup9;/L, creatinine &gt;1.1 mg/dL or doubling, transaminases &ge;2&times; ULN with severe persistent RUQ/epigastric pain, pulmonary edema, or new cerebral/visual symptoms. <b>Proteinuria is not required</b> to diagnose severe features.</div>
+    </details>
+    <details class="acc">
+      <summary>Eclampsia &amp; HELLP <span class="chevron"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-chevron"/></svg></span></summary>
+      <div class="acc-body"><b>Eclampsia:</b> new-onset generalized seizures in a woman with pre-eclampsia, without another identifiable cause. <b>HELLP syndrome:</b> Hemolysis, Elevated Liver enzymes, Low Platelets &mdash; a severe variant that may occur with only modestly elevated BP.</div>
+    </details>
+  </div>
+
+  <div class="callout warn">
+    <svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg>
+    <div><h4>Common pitfall</h4><p>Hypertension alone (without proteinuria or another severe feature) is <b>gestational hypertension</b>, not pre-eclampsia. Conversely, severe features (e.g., BP &ge;160/110 or thrombocytopenia) upgrade the diagnosis to severe pre-eclampsia even if the urine dipstick is negative.</p></div>
+  </div>
+
+  <div class="card elevated">
+    <div class="card-header"><div class="ic" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-calc"/></svg></div><h3>Bedside classification engine</h3></div>
+    <div class="grid-2">
+      <div><label style="margin-top:0">SBP (mmHg)</label><input id="pe-sbp" inputmode="numeric" placeholder="e.g. 168"/></div>
+      <div><label style="margin-top:0">DBP (mmHg)</label><input id="pe-dbp" inputmode="numeric" placeholder="e.g. 112"/></div>
+      <div><label style="margin-top:0">Proteinuria (dipstick)</label>
+        <select id="pe-protein"><option value="none">None</option><option value="trace">Trace</option><option value="1+">1+</option><option value="2+">2+</option><option value="3+">3+</option><option value="4+">4+</option></select>
+      </div>
+      <div><label style="margin-top:0">Platelets (&times;10&sup9;/L)</label><input id="pe-plt" inputmode="numeric" placeholder="e.g. 95"/></div>
+      <div><label style="margin-top:0">AST/ALT (U/L)</label><input id="pe-lft" inputmode="numeric" placeholder="e.g. 90"/></div>
+      <div><label style="margin-top:0">Lab ULN (U/L)</label><input id="pe-uln" inputmode="numeric" value="35"/></div>
+    </div>
+    <button class="btn full" id="pe-run" style="margin-top:14px"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-check"/></svg>Classify</button>
+    <div id="pe-out" style="margin-top:14px"></div>
+    <p class="small muted" style="margin-top:8px">Educational decision support only &mdash; always correlate with the full clinical picture; this is not a substitute for clinical judgment.</p>
+  </div>
+
+  <div class="grid-2">
+    <button class="card tight" id="openMgCard" style="text-align:left;cursor:pointer;border:none">
+      <div class="card-header"><div class="ic" style="background:var(--md-error-container);color:var(--md-on-error-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-syringe"/></svg></div><h3>MgSO4 module</h3></div>
+      <p class="small muted" style="margin:0">Loading/maintenance regimens, toxicity monitoring, and a bedside maintenance timer.</p>
+    </button>
+    <button class="card tight" id="openBpCard" style="text-align:left;cursor:pointer;border:none">
+      <div class="card-header"><div class="ic" style="background:var(--md-secondary-container);color:var(--md-on-secondary-container)"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-bp"/></svg></div><h3>Acute BP control</h3></div>
+      <p class="small muted" style="margin:0">Labetalol / hydralazine / nifedipine escalation for severe hypertension.</p>
+    </button>
+  </div>
+
+  <div class="callout danger">
+    <svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg>
+    <div><h4>MgSO4 toxicity &mdash; know the antidote</h4><p>Loss of patellar reflex is usually the earliest sign of magnesium toxicity, followed by respiratory depression (RR &lt;12/min) and, at higher levels, cardiac arrest. Antidote: <b>calcium gluconate 1 g (10 mL of 10%) IV over 10 minutes.</b> Hold/reduce the dose if urine output &lt;25&ndash;30 mL/h, since magnesium is renally cleared.</p></div>
+  </div>
+</section>
+
+</div><nav class="bottomnav">
+  <button class="nav-item active" data-screen="screen-calc"><span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-calc"/></svg></span>Calculator</button>
+  <button class="nav-item" data-screen="screen-contacts"><span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-calendar"/></svg></span>ANC Contacts</button>
+  <button class="nav-item" data-screen="screen-alerts"><span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-alert"/></svg></span>Alerts &amp; Labs</button>
+  <button class="nav-item" data-screen="screen-milestones"><span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-baby"/></svg></span>Milestones</button>
+  <button class="nav-item" data-screen="screen-hdp"><span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-bp"/></svg></span>HDP Toolkit</button>
+</nav>
+
+<div class="fab-stack">
+  <button class="fab emergency" id="fabEmergency"><svg viewBox="0 0 24 24"><use href="#ic-emergency"/></svg>Emergency</button>
+</div>
+
+<button id="backToTop" aria-label="Back to top"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-chevron"/></svg></button>
+
+<div class="sheet-overlay" id="sheetOverlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div><h3 id="sheetTitle">Title</h3><span class="kicker" id="sheetKicker"></span></div>
+      <button class="sheet-close" id="sheetClose"><svg class="icon" viewBox="0 0 24 24"><use href="#ic-close"/></svg></button>
+    </div>
+    <div class="sheet-body" id="sheetBody"></div>
+    <div class="sheet-actions" id="sheetActions"></div>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:18px 18px 24px;font-size:11.5px" class="muted">
+  Ethio ANC &middot; Clinical edition &middot; Developed by Dr. Tamiru Abera, Internal Medicine Resident, Ambo University Referral Hospital.<br/>
+  <a href="mailto:tamiriye224@gmail.com">tamiriye224@gmail.com</a> &middot; Content reviewed against WHO ANC 2016, ACOG, ISSHP, and Ethiopia FMOH guidance. Not a substitute for local protocol or clinical judgment.
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================== THEME ===================== */
+var THEME_KEY='ethioanc_theme_v2';
+function applyTheme(mode){
+  document.documentElement.setAttribute('data-theme', mode);
+  var ic = document.getElementById('themeIcon');
+  if(ic) ic.innerHTML = '<use href="#'+(mode==='dark'?'ic-sun':'ic-moon')+'"/>';
+  try{ localStorage.setItem(THEME_KEY, mode); }catch(e){}
+}
+(function initTheme(){
+  var mode='light';
+  try{ mode = localStorage.getItem(THEME_KEY) || mode; }catch(e){}
+  applyTheme(mode);
+})();
+document.getElementById('themeToggle').addEventListener('click', function(){
+  var cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'dark':'light';
+  applyTheme(cur==='dark'?'light':'dark');
+});
+document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+
+/* ===================== NAV / SCREENS ===================== */
+var navItems = document.querySelectorAll('.nav-item');
+navItems.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    navItems.forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById(btn.getAttribute('data-screen')).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ===================== SEARCH ===================== */
+document.getElementById('quickSearch').addEventListener('input', function(e){
+  var q = e.target.value.trim().toLowerCase();
+  if(!q){ return; }
+  var target = null;
+  document.querySelectorAll('.screen').forEach(function(s){
+    var hay = (s.getAttribute('data-searchtext')||'').toLowerCase();
+    if(hay.indexOf(q)>-1 && !target) target = s.id;
+  });
+  if(target){
+    navItems.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-screen')===target); });
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('active', s.id===target); });
+  }
+});
+
+/* ===================== SCROLL PROGRESS + BACK TO TOP ===================== */
+var bar = document.getElementById('scrollProgress');
+var toTop = document.getElementById('backToTop');
+function onScroll(){
+  var doc = document.documentElement;
+  var st = doc.scrollTop || document.body.scrollTop;
+  var sh = (doc.scrollHeight||document.body.scrollHeight) - doc.clientHeight;
+  var pct = sh>0 ? (st/sh)*100 : 0;
+  bar.style.width = pct+'%';
+  toTop.classList.toggle('show', st>320);
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+toTop.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+
+/* ===================== GENERIC SHEET API ===================== */
+var sheetOverlay = document.getElementById('sheetOverlay');
+var sheetTitle = document.getElementById('sheetTitle');
+var sheetKicker = document.getElementById('sheetKicker');
+var sheetBody = document.getElementById('sheetBody');
+var sheetActions = document.getElementById('sheetActions');
+function esc(s){ return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+function openSheet(opts){
+  opts = opts || {};
+  sheetTitle.textContent = opts.title || '';
+  sheetKicker.textContent = opts.kicker || '';
+  sheetBody.innerHTML = opts.html || '';
+  sheetActions.innerHTML = '';
+  (opts.actions||[]).forEach(function(a){
+    var b = document.createElement('button');
+    b.className = 'btn '+(a.className||'outline');
+    b.textContent = a.label || 'OK';
+    b.addEventListener('click', function(){
+      try{ a.onClick && a.onClick(); }catch(e){}
+      if(a.close !== false) closeSheet();
+    });
+    sheetActions.appendChild(b);
+  });
+  sheetOverlay.classList.add('open');
+  if(typeof opts.onOpen==='function'){ setTimeout(function(){ try{opts.onOpen();}catch(e){} },0); }
+}
+function closeSheet(){ sheetOverlay.classList.remove('open'); sheetBody.innerHTML=''; sheetActions.innerHTML=''; }
+document.getElementById('sheetClose').addEventListener('click', closeSheet);
+sheetOverlay.addEventListener('click', function(e){ if(e.target===sheetOverlay) closeSheet(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeSheet(); });
+window.alert = function(msg){ openSheet({title:'Notice', html:'<p>'+esc(msg)+'</p>', actions:[{label:'OK',className:'btn'}]}); };
+
+/* ===================== ABOUT ===================== */
+document.getElementById('aboutBtn').addEventListener('click', function(){
+  openSheet({
+    title:'About Ethio ANC',
+    kicker:'Clinical edition v2.0',
+    html: '<p>Ethio ANC is an offline-first antenatal care support tool for clinicians, residents, midwives, and students. It computes gestational age and EDD from LMP, a known EDD, a known GA on a past date, or ultrasound biometry (CRL/BPD, ACOG-based), with live Gregorian&harr;Ethiopian calendar conversion.</p>'+
+      '<p>This edition adds a full WHO 8-contact reference, an evidence-based supplementation table, a booking laboratory panel, GDM diagnostic thresholds, and a hypertensive disorders of pregnancy toolkit (classification engine, MgSO4 module, BP protocol) built on ACOG/ISSHP definitions.</p>'+
+      '<p class="small muted">Developed by Dr. Tamiru Abera, Internal Medicine Resident, Ambo University Referral Hospital. Contact: <a href="mailto:tamiriye224@gmail.com">tamiriye224@gmail.com</a> &middot; Telegram <a href="https://t.me/tamiriye" target="_blank" rel="noopener">@realtamiru</a>.</p>'+
+      '<p class="small muted">This tool supports &mdash; never replaces &mdash; clinical judgment and local protocol.</p>',
+    actions:[{label:'Close', className:'btn'}]
+  });
+});
+
+/* ===================== CORE DATE MATH ===================== */
+function pad(n){ return String(n).padStart(2,'0'); }
+function toISO(d){ return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()); }
+function fromISO(s){ var p=s.split('-').map(Number); return new Date(Date.UTC(p[0],p[1]-1,p[2])); }
+function addDays(d,n){ var x=new Date(d.getTime()); x.setUTCDate(x.getUTCDate()+n); return x; }
+function diffDays(a,b){ return Math.floor((b.getTime()-a.getTime())/86400000); }
+function weeksDays(days){ var w=Math.floor(days/7), r=days%7; return {w:r<0?w-1:w, d:r<0?r+7:r}; }
+function todayUTC(){ var n=new Date(); return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())); }
+
+var ETHIOPIC_EPOCH = 1724221;
+function gregorianToJDN(y,m,d){
+  var a=Math.floor((14-m)/12), y2=y+4800-a, m2=m+12*a-3;
+  return d + Math.floor((153*m2+2)/5) + 365*y2 + Math.floor(y2/4) - Math.floor(y2/100) + Math.floor(y2/400) - 32045;
+}
+function jdnToGregorian(j){
+  var a=j+32044, b=Math.floor((4*a+3)/146097), c=a-Math.floor((146097*b)/4);
+  var d=Math.floor((4*c+3)/1461), e=c-Math.floor((1461*d)/4), m=Math.floor((5*e+2)/153);
+  var day=e-Math.floor((153*m+2)/5)+1, month=m+3-12*Math.floor(m/10), year=100*b+d-4800+Math.floor(m/10);
+  return {y:year,m:month,d:day};
+}
+function ethiopicToJDN(y,m,d){ return ETHIOPIC_EPOCH + 365*(y-1) + Math.floor(y/4) + 30*(m-1) + d - 1; }
+function jdnToEthiopic(j){
+  var offset=j-ETHIOPIC_EPOCH, cycle=Math.floor(offset/1461), r=offset%1461, yq=Math.floor(r/365);
+  var n=(r%365)+365*Math.floor(r/1460), y=4*cycle+yq+1, m=Math.floor(n/30)+1, d=(n%30)+1;
+  return {y:y,m:m,d:d};
+}
+var ETHI_MONTHS=['Meskerem','Tikimt','Hidar','Tahsas','Tir','Yekatit','Megabit','Miyazia','Ginbot','Sene','Hamle','Nehasse','Pagume'];
+function fmtEthi(e){ return ETHI_MONTHS[e.m-1]+' '+e.d+', '+e.y; }
+function gaDaysFromCRLmm(crl){ return 23.73 + 8.052*Math.sqrt(crl); }
+var BPD_ANCHORS=[{w:14,b:32.3},{w:16,b:32.3},{w:17,b:36.0},{w:18,b:39.5},{w:19,b:43.0},{w:20,b:46.4},{w:22,b:53.0},{w:24,b:59.3},{w:26,b:65.3},{w:28,b:70.8},{w:30,b:76.0},{w:32,b:80.7},{w:34,b:85.0},{w:36,b:88.0}];
+function gaWeeksFromBPDmm(bpd){
+  var arr=BPD_ANCHORS.slice().sort(function(a,b){return a.b-b.b;});
+  if(bpd<=arr[0].b) return arr[0].w;
+  if(bpd>=arr[arr.length-1].b) return arr[arr.length-1].w;
+  for(var i=0;i<arr.length-1;i++){
+    if(bpd>=arr[i].b && bpd<=arr[i+1].b){
+      var r=(bpd-arr[i].b)/(arr[i+1].b-arr[i].b);
+      return arr[i].w + r*(arr[i+1].w-arr[i].w);
+    }
+  }
+  return 20;
+}
+
+/* ===================== CALCULATOR STATE ===================== */
+var mode='lmp';
+var today = todayUTC();
+document.querySelectorAll('.mode-tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.mode-tab').forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    mode = t.getAttribute('data-mode');
+    ['lmp','edd','ga','us'].forEach(function(k){
+      document.getElementById(k+'Box').classList.toggle('hidden', k!==mode);
+    });
+  });
+});
+
+var calendarMode = document.getElementById('calendarMode');
+var lmpG=document.getElementById('lmpG'), eddG=document.getElementById('eddG'), gaDateG=document.getElementById('gaDateG'), measG=document.getElementById('measG');
+var lmpGreg=document.getElementById('lmpGreg'), eddGreg=document.getElementById('eddGreg'), gaGreg=document.getElementById('gaGreg'), measGreg=document.getElementById('measGreg');
+var lmpEthi=document.getElementById('lmpEthi'), eddEthi=document.getElementById('eddEthi'), gaEthi=document.getElementById('gaEthi'), measEthi=document.getElementById('measEthi');
+[lmpG,eddG,gaDateG,measG].forEach(function(el){ if(el) el.value = toISO(today); });
+
+var ecSelected = {lmp:null, edd:null, ga:null, meas:null};
+var EC_KEYS = ['lmp','edd','ga','meas'];
+
+/* ----- Manual Ethiopian date entry (Day / Month select / Year), mirrors Gregorian's plain fill-in feel ----- */
+var todayEthi = jdnToEthiopic(gregorianToJDN(today.getUTCFullYear(), today.getUTCMonth()+1, today.getUTCDate()));
+
+function buildMonthOptions(sel, defaultM){
+  var html='';
+  for(var i=0;i<ETHI_MONTHS.length;i++){ html += '<option value="'+(i+1)+'"'+((i+1)===defaultM?' selected':'')+'>'+ETHI_MONTHS[i]+'</option>'; }
+  sel.innerHTML = html;
+}
+function updateEcField(key){
+  var dEl=document.getElementById(key+'EcD'), mEl=document.getElementById(key+'EcM'), yEl=document.getElementById(key+'EcY');
+  var out=document.getElementById(key+'EcOut');
+  var d=parseInt(dEl.value,10), m=parseInt(mEl.value,10), y=parseInt(yEl.value,10);
+  var maxDay = (m===13) ? (((y%4)===3)?6:5) : 30;
+  if(!d || !m || !y || d<1 || d>maxDay || y<1900 || y>2100){
+    ecSelected[key]=null;
+    if(out) out.textContent = m===13 ? ('Pagume has '+maxDay+' days for this year — enter a valid day.') : '—';
+    return;
+  }
+  var j = ethiopicToJDN(y,m,d);
+  var g = jdnToGregorian(j);
+  var gDate = new Date(Date.UTC(g.y,g.m-1,g.d));
+  ecSelected[key] = gDate;
+  if(out) out.textContent = 'Gregorian equivalent: '+new Intl.DateTimeFormat('en-GB',{dateStyle:'medium'}).format(gDate);
+}
+EC_KEYS.forEach(function(key){
+  var dEl=document.getElementById(key+'EcD'), mEl=document.getElementById(key+'EcM'), yEl=document.getElementById(key+'EcY');
+  buildMonthOptions(mEl, todayEthi.m);
+  dEl.value = todayEthi.d; yEl.value = todayEthi.y;
+  [dEl,mEl,yEl].forEach(function(el){ el.addEventListener('input', function(){ updateEcField(key); }); el.addEventListener('change', function(){ updateEcField(key); }); });
+  updateEcField(key);
+});
+
+function toggleCalendarInputs(){
+  var ethi = calendarMode.value==='ethi';
+  [lmpGreg,eddGreg,gaGreg,measGreg].forEach(function(el){ el.style.display = ethi?'none':'flex'; });
+  [lmpEthi,eddEthi,gaEthi,measEthi].forEach(function(el){ el.style.display = ethi?'flex':'none'; });
+  ['lmpEcOut','eddEcOut','gaEcOut','measEcOut'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display = ethi?'block':'none'; });
+  document.getElementById('noteEc').style.display = ethi?'block':'none';
+  if(ethi){ EC_KEYS.forEach(updateEcField); }
+}
+calendarMode.addEventListener('change', toggleCalendarInputs);
+toggleCalendarInputs();
+
+function showErr(el,msg){ el.textContent = msg||''; el.style.display = msg?'block':'none'; }
+var lmpErr=document.getElementById('lmpErr'), eddErr=document.getElementById('eddErr'), gaErr=document.getElementById('gaErr'), usErr=document.getElementById('usErr');
+
+function readDate(which){
+  var ethi = calendarMode.value==='ethi';
+  if(!ethi){
+    if(which==='lmp') return lmpG.value ? fromISO(lmpG.value) : null;
+    if(which==='edd') return eddG.value ? fromISO(eddG.value) : null;
+    if(which==='ga') return gaDateG.value ? fromISO(gaDateG.value) : null;
+    if(which==='meas') return measG.value ? fromISO(measG.value) : null;
+  } else {
+    return ecSelected[which] || null;
+  }
+}
+function trimesterByDays(days){ var w=Math.floor(days/7); if(w<=13) return '1st'; if(w<=27) return '2nd'; return '3rd'; }
+
+document.getElementById('resetBtn').addEventListener('click', function(){
+  [lmpG,eddG,gaDateG,measG].forEach(function(el){ el.value=''; });
+  EC_KEYS.forEach(function(key){
+    document.getElementById(key+'EcD').value = todayEthi.d;
+    document.getElementById(key+'EcM').value = todayEthi.m;
+    document.getElementById(key+'EcY').value = todayEthi.y;
+    updateEcField(key);
+  });
+  [lmpErr,eddErr,gaErr,usErr].forEach(function(e){ showErr(e,''); });
+  document.getElementById('outputs').classList.add('hidden');
+});
+
+document.getElementById('calcBtn').addEventListener('click', function(){
+  try{ calculate(); }catch(e){ window.alert('Error: '+e.message); console.error(e); }
+});
+
+function calculate(){
+  showErr(lmpErr,''); showErr(eddErr,''); showErr(gaErr,''); showErr(usErr,'');
+  var lmpGDate=null, eddGDate=null;
+  if(mode==='lmp'){
+    var d1=readDate('lmp'); if(!d1){ showErr(lmpErr,'Please set LMP.'); return; }
+    lmpGDate=d1; eddGDate=addDays(lmpGDate,280);
+  } else if(mode==='edd'){
+    var de=readDate('edd'); if(!de){ showErr(eddErr,'Please set EDD.'); return; }
+    eddGDate=de; lmpGDate=addDays(eddGDate,-280);
+  } else if(mode==='ga'){
+    var w=parseInt(document.getElementById('gaWeeks').value||'0',10);
+    var dd=parseInt(document.getElementById('gaDays').value||'0',10);
+    if(isNaN(w)||isNaN(dd)||w<0||dd<0||dd>6){ showErr(gaErr,'Enter GA (weeks 0–45, days 0–6).'); return; }
+    var assess=readDate('ga'); if(!assess){ showErr(gaErr,'Set assessment date.'); return; }
+    var total=w*7+dd; if(total>45*7){ showErr(gaErr,'GA too large.'); return; }
+    eddGDate=addDays(assess, 280-total); lmpGDate=addDays(eddGDate,-280);
+  } else if(mode==='us'){
+    var crl=parseFloat(document.getElementById('crlMm').value);
+    var bpd=parseFloat(document.getElementById('bpdMm').value);
+    if(!crl && !bpd){ showErr(usErr,'Enter CRL and/or BPD.'); return; }
+    var gaDays = crl ? Math.round(gaDaysFromCRLmm(crl)) : Math.round(gaWeeksFromBPDmm(bpd)*7);
+    var m = readDate('meas') || today;
+    eddGDate = addDays(m, 280-gaDays); lmpGDate = addDays(eddGDate,-280);
+  }
+
+  var daysSinceLMP = diffDays(lmpGDate, today);
+  var wd = weeksDays(daysSinceLMP);
+  document.getElementById('gaToday').textContent = wd.w+' w '+wd.d+' d';
+  var lmpE = jdnToEthiopic(gregorianToJDN(lmpGDate.getUTCFullYear(), lmpGDate.getUTCMonth()+1, lmpGDate.getUTCDate()));
+  document.getElementById('gaAnchor').textContent = 'Anchor: LMP '+new Intl.DateTimeFormat('en-GB',{dateStyle:'medium'}).format(lmpGDate)+' (G) • '+fmtEthi(lmpE)+' (E.C.)';
+  document.getElementById('eddOut').textContent = new Intl.DateTimeFormat('en-GB',{dateStyle:'medium'}).format(eddGDate);
+  var eE = jdnToEthiopic(gregorianToJDN(eddGDate.getUTCFullYear(), eddGDate.getUTCMonth()+1, eddGDate.getUTCDate()));
+  document.getElementById('eddOutEthi').textContent = 'Ethiopian: '+fmtEthi(eE);
+  document.getElementById('trimester').textContent = trimesterByDays(daysSinceLMP);
+  document.getElementById('weeksCompleted').textContent = Math.max(0, Math.floor(daysSinceLMP/7));
+
+  var schedule = document.getElementById('schedule'); schedule.innerHTML='';
+  var contactWeeks=[12,20,26,30,34,36,38,40];
+  contactWeeks.forEach(function(wk,i){
+    var dateG = addDays(lmpGDate, wk*7);
+    var et = jdnToEthiopic(gregorianToJDN(dateG.getUTCFullYear(), dateG.getUTCMonth()+1, dateG.getUTCDate()));
+    var due = new Intl.DateTimeFormat('en-GB',{dateStyle:'medium'}).format(dateG);
+    var nowDiff = diffDays(today, dateG);
+    var status = nowDiff>0 ? 'Upcoming' : (nowDiff===0 ? 'Today' : 'Passed');
+    var row = document.createElement('div');
+    row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--md-outline)';
+    row.innerHTML = '<span><span class="badge on">C'+(i+1)+'</span> Week '+wk+' <span class="small muted">— '+due+' • '+fmtEthi(et)+'</span></span><span class="badge">'+status+'</span>';
+    schedule.appendChild(row);
+  });
+
+  document.getElementById('outputs').classList.remove('hidden');
+  document.getElementById('outputs').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+document.getElementById('usInfoBtn').addEventListener('click', function(){
+  openSheet({
+    title:'Ultrasound accuracy & redating',
+    kicker:'ACOG / AIUM / SMFM Committee Opinion 700',
+    html:
+      '<h4 style="font-size:14px">Typical dating accuracy by trimester</h4>'+
+      '<ul style="padding-left:22px;font-size:14px"><li><b>1st trimester (CRL, ≤13+6w):</b> most accurate; often within ±5–7 days.</li>'+
+      '<li><b>2nd trimester (BPD/HC/AC/FL):</b> accuracy decreases; roughly ±7–14 days.</li>'+
+      '<li><b>3rd trimester:</b> least accurate, ~±21 days; a discrepancy may reflect growth restriction rather than wrong dates.</li></ul>'+
+      '<h4 style="font-size:14px">When to redate (replace LMP-based EDD with ultrasound-based EDD)</h4>'+
+      '<div class="tbl-wrap"><table class="ref"><thead><tr><th>GA at scan</th><th>Redate if discrepancy &gt;</th></tr></thead><tbody>'+
+      '<tr><td>≤8w6d (CRL)</td><td>5 days</td></tr>'+
+      '<tr><td>9w0d–13w6d (CRL)</td><td>7 days</td></tr>'+
+      '<tr><td>14w0d–15w6d</td><td>7 days</td></tr>'+
+      '<tr><td>16w0d–21w6d</td><td>10 days</td></tr>'+
+      '<tr><td>22w0d–27w6d</td><td>14 days</td></tr>'+
+      '<tr><td>≥28w0d</td><td>21 days (use caution — consider growth restriction)</td></tr>'+
+      '</tbody></table></div>',
+    actions:[{label:'Close', className:'btn'}]
+  });
+});
+
+/* ===================== WHO CONTACTS CONTENT ===================== */
+var CONTACTS = {
+  c1:{title:'C1 — First contact (≤ 12 weeks)', sub:'Booking visit — establish baseline, confirm dating', items:[
+    'History: LMP, menstrual/obstetric/medical/surgical history, prior pregnancy complications, mental health and intimate-partner-violence screening.',
+    'Exam: BP, weight/height/BMI, general and breast exam.',
+    'Labs: Hb, blood group & Rh(D), urinalysis, HIV (opt-out), syphilis, HBsAg per policy.',
+    'Offer a dating ultrasound before 24 weeks (ideally 11–14 weeks — combines dating with aneuploidy screening where available).',
+    'Start iron–folic acid (30–60 mg elemental iron + 0.4 mg folic acid daily); give TT1 if unimmunized; provide ITN and start IPTp-SP at 13 weeks in malaria-endemic areas.',
+    'Counsel on nutrition, danger signs, and begin a birth-preparedness/complication-readiness plan.'
+  ]},
+  c2:{title:'C2 — Second contact (20 weeks)', sub:'Anatomy survey window', items:[
+    'Reassess BP, weight, fundal height, fetal heart sounds, urine protein.',
+    'Review booking labs; reinforce IFA adherence; single-dose deworming after the 1st trimester.',
+    'Offer the detailed anomaly/anatomy ultrasound (18–22 weeks) — fetal structural survey, placental location, dating confirmation.',
+    'Second IPTp-SP dose if in a malaria-endemic area (doses ≥4 weeks apart).'
+  ]},
+  c3:{title:'C3 — Third contact (26 weeks)', sub:'Pre-eclampsia and anemia screen', items:[
+    'Routine checks: BP, fundal height, fetal heart rate, urine protein.',
+    'Screen for pre-eclampsia symptoms: headache, visual changes, epigastric pain, facial/hand swelling.',
+    'Repeat Hb; consider early GDM testing if high risk (obesity, prior GDM, strong family history, prior macrosomia).',
+    'IPTp-SP dose if indicated.'
+  ]},
+  c4:{title:'C4 — Fourth contact (30 weeks)', sub:'GDM window opens', items:[
+    'Routine checks; assess fetal growth and movements.',
+    'Universal 75 g OGTT for GDM, 24–28 weeks (IADPSG one-step criteria — see Alerts & Labs tab).',
+    'If Rh(D)-negative and unsensitized, plan routine anti-D immunoglobulin around 28 weeks.',
+    'Update and finalize the birth and emergency preparedness plan (place of birth, transport, funds, blood donor, decision-maker).'
+  ]},
+  c5:{title:'C5 — Fifth contact (34 weeks)', sub:'Presentation and PE screen', items:[
+    'Routine checks; screen for pre-eclampsia symptoms.',
+    'Assess fetal presentation (Leopold\'s maneuvers).',
+    'Reinforce danger-sign education.'
+  ]},
+  c6:{title:'C6 — Sixth contact (36 weeks)', sub:'GBS window; birth plan finalized', items:[
+    'Confirm fetal presentation; discuss external cephalic version counseling if breech.',
+    'Recto-vaginal GBS swab, 36–37 weeks, where resources allow.',
+    'Repeat anemia screen; ensure tetanus series is complete.',
+    'Finalize intrapartum and newborn care plan.'
+  ]},
+  c7:{title:'C7 — Seventh contact (38 weeks)', sub:'Late-pregnancy monitoring', items:[
+    'Routine checks; confirm maternal and fetal wellbeing.',
+    'Reassess readiness for birth; reinforce fetal-movement awareness.',
+    'Schedule the next contact and discuss expected timing of labor.'
+  ]},
+  c8:{title:'C8 — Eighth contact (40 weeks)', sub:'Post-dates planning', items:[
+    'Routine checks; discuss post-term monitoring if undelivered.',
+    'Offer induction of labor around 41 weeks — evidence supports reduced stillbirth risk without increasing cesarean rates (ACOG); antenatal fetal surveillance (NST/BPP) if expectant management continues.',
+    'Confirm readiness: transport, support person, danger signs review.'
+  ]}
+};
+function renderContact(key){
+  var c = CONTACTS[key];
+  var box = document.getElementById('contactDetail');
+  box.innerHTML = '<h4 style="font-size:14.5px;margin-bottom:2px">'+c.title+'</h4><div class="small muted" style="margin-bottom:8px">'+c.sub+'</div><ul style="padding-left:22px;font-size:14px;line-height:1.65">'+
+    c.items.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ul>';
+  document.querySelectorAll('#contactChips .chip').forEach(function(ch){ ch.classList.toggle('active', ch.getAttribute('data-c')===key); });
+}
+document.querySelectorAll('#contactChips .chip').forEach(function(ch){
+  ch.addEventListener('click', function(){ renderContact(ch.getAttribute('data-c')); });
+});
+renderContact('c1');
+
+/* ===================== PE CLASSIFICATION ENGINE (corrected logic) ===================== */
+function parseNum(v){ var n=Number(String(v||'').replace(/[^0-9.\-]/g,'')); return Number.isFinite(n)?n:null; }
+function proteinPositive(p){ if(!p) return false; var s=String(p).toLowerCase(); return (s.indexOf('1+')>-1||s.indexOf('2+')>-1||s.indexOf('3+')>-1||s.indexOf('4+')>-1); }
+
+function classifyHDP(o){
+  var hasHTN = (o.sbp!==null && o.sbp>=140) || (o.dbp!==null && o.dbp>=90);
+  var severeBP = (o.sbp!==null && o.sbp>=160) || (o.dbp!==null && o.dbp>=110);
+  var protPos = proteinPositive(o.protein);
+  var severePlt = (o.plt!==null && o.plt<100);
+  var severeLft = (o.lft!==null && o.uln!==null) ? (o.lft >= 2*o.uln) : (o.lft!==null ? (o.lft>=70) : false);
+  var severeFeature = severeBP || severePlt || severeLft;
+
+  if(!hasHTN){
+    if(protPos) return {level:'note', label:'Proteinuria without hypertension', reasons:['Not pre-eclampsia by definition — evaluate for renal/urinary causes; recheck BP.']};
+    return {level:'none', label:'No hypertensive disorder identified', reasons:[]};
+  }
+  if(hasHTN && !protPos && !severeFeature){
+    return {level:'ghtn', label:'Gestational hypertension', reasons:['BP criteria met; no proteinuria and no severe feature present — confirm on repeat reading ≥4h apart.']};
+  }
+  if(severeFeature){
+    var reasons=[];
+    if(severeBP) reasons.push('Severe range BP (≥160/110)');
+    if(severePlt) reasons.push('Platelets <100 ×10⁹/L');
+    if(severeLft) reasons.push('Transaminases ≥2× ULN');
+    return {level:'severe', label:'Pre-eclampsia with severe features', reasons:reasons};
+  }
+  return {level:'pe', label:'Pre-eclampsia (without severe features)', reasons:[hasHTN?'Hypertension + proteinuria':'']};
+}
+
+document.getElementById('pe-run').addEventListener('click', function(){
+  var sbp=parseNum(document.getElementById('pe-sbp').value);
+  var dbp=parseNum(document.getElementById('pe-dbp').value);
+  var protein=document.getElementById('pe-protein').value;
+  var plt=parseNum(document.getElementById('pe-plt').value);
+  var lft=parseNum(document.getElementById('pe-lft').value);
+  var uln=parseNum(document.getElementById('pe-uln').value);
+  var res = classifyHDP({sbp:sbp,dbp:dbp,protein:protein,plt:plt,lft:lft,uln:uln});
+  var box = document.getElementById('pe-out');
+
+  if(res.level==='none'){
+    box.innerHTML = '<div class="callout pearl"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-check"/></svg><div><h4>No hypertensive disorder</h4><p>Continue routine ANC; recheck BP if symptomatic or borderline.</p></div></div>';
+  } else if(res.level==='note'){
+    box.innerHTML = '<div class="callout info"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-info"/></svg><div><h4>'+res.label+'</h4><p>'+esc(res.reasons.join(' '))+'</p></div></div>';
+  } else if(res.level==='ghtn'){
+    box.innerHTML = '<div class="callout warn"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>'+res.label+'</h4><p>'+esc(res.reasons.join(' '))+' Monitor closely — up to 1 in 4 progress to pre-eclampsia. Reassess BP and symptoms at each contact.</p></div></div>';
+  } else if(res.level==='pe'){
+    box.innerHTML = '<div class="callout warn"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>'+res.label+'</h4><p>'+esc(res.reasons.join(' • '))+'</p><ul><li>Repeat BP and reassess symptoms.</li><li>Arrange same-day referral and labs as available.</li><li>Consider low-dose aspirin history for next pregnancy counseling.</li></ul>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="pe-open-bp">BP protocol</button><button class="btn sm outline" id="pe-open-mg">MgSO4</button></div></div></div>';
+    document.getElementById('pe-open-bp').addEventListener('click', openBP);
+    document.getElementById('pe-open-mg').addEventListener('click', openMg);
+  } else if(res.level==='severe'){
+    box.innerHTML = '<div class="callout danger"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>'+res.label+'</h4><p>'+esc(res.reasons.join(' • '))+'</p><ul><li><b>Start MgSO4</b> for seizure prophylaxis.</li><li><b>Control BP urgently</b> if severe range.</li><li><b>Arrange urgent referral/delivery planning</b> per gestational age and severity.</li></ul>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn sm danger" id="pe-open-emg">Emergency</button><button class="btn sm" id="pe-open-mg2">MgSO4</button><button class="btn sm outline" id="pe-open-bp2">BP protocol</button></div></div></div>';
+    document.getElementById('pe-open-emg').addEventListener('click', openEmergency);
+    document.getElementById('pe-open-mg2').addEventListener('click', openMg);
+    document.getElementById('pe-open-bp2').addEventListener('click', openBP);
+  }
+});
+
+/* ===================== MgSO4 MODULE ===================== */
+var mgTimer=null, mgNextDue=null, mgEnd=null;
+function fmtHMS(ms){
+  var s=Math.max(0,Math.floor(ms/1000)), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+  return pad(h)+':'+pad(m)+':'+pad(ss);
+}
+function mgHtml(){
+  return '<div class="callout danger"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>Default: Pritchard IM q4h, 24h</h4><p>Switch to IV infusion (Zuspan) where continuous monitoring is available.</p></div></div>'+
+  '<div class="two-col">'+
+    '<div class="card tight"><b class="small">Pritchard (IV + IM)</b><ul class="small" style="padding-left:22px"><li><b>Loading:</b> 4 g IV over 15–20 min + 10 g IM (5 g each buttock).</li><li><b>Maintenance:</b> 5 g IM every 4 hours, alternating buttocks.</li></ul></div>'+
+    '<div class="card tight"><b class="small">Zuspan (IV infusion)</b><ul class="small" style="padding-left:22px"><li><b>Loading:</b> 4–6 g IV over 15–20 min.</li><li><b>Maintenance:</b> 1–2 g/hour continuous IV infusion.</li></ul></div>'+
+  '</div>'+
+  '<div class="divider"></div><b class="small">Monitoring checklist (recheck before every dose)</b>'+
+  '<div class="grid-3" style="margin-top:8px"><label class="small"><input type="checkbox" id="mg-rr"/> RR ≥ 12/min</label><label class="small"><input type="checkbox" id="mg-urine"/> Urine ≥ 25–30 mL/hr</label><label class="small"><input type="checkbox" id="mg-reflex"/> Patellar reflex present</label></div>'+
+  '<div class="callout note" style="margin-top:14px"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-note"/></svg><div><h4>If any checklist item fails</h4><p>Withhold the next dose and reassess; give calcium gluconate 1 g IV over 10 min if respiratory depression or absent reflexes.</p></div></div>'+
+  '<div class="divider"></div><b class="small">Maintenance timer</b>'+
+  '<div class="two-col" style="margin-top:8px">'+
+    '<div><label style="margin-top:0">Regimen</label><select id="mg-reg"><option value="im4" selected>IM q4h (Pritchard)</option><option value="iv1">IV infusion</option></select></div>'+
+    '<div><label style="margin-top:0">Duration (hours)</label><input id="mg-hours" inputmode="numeric" value="24"/></div>'+
+  '</div>'+
+  '<div style="display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap"><button class="btn sm" id="mg-start">Start timer</button><button class="btn sm outline" id="mg-stop">Stop</button><span class="badge" id="mg-timer" style="display:none"></span></div>';
+}
+function startMgTimer(){
+  var reg = document.getElementById('mg-reg').value || 'im4';
+  var hours = parseNum(document.getElementById('mg-hours').value) || 24;
+  var now=Date.now();
+  mgEnd = now + hours*3600*1000;
+  mgNextDue = (reg==='im4') ? now + 4*3600*1000 : now + 60*60*1000;
+  var badge=document.getElementById('mg-timer'); if(badge) badge.style.display='inline';
+  if(mgTimer) clearInterval(mgTimer);
+  mgTimer = setInterval(function(){
+    var now2=Date.now(), tLeft=mgEnd-now2, dueIn=mgNextDue-now2;
+    if(tLeft<=0){ stopMgTimer(true); return; }
+    var b2=document.getElementById('mg-timer');
+    if(b2){ b2.textContent = (reg==='im4') ? ('Next dose in '+fmtHMS(dueIn)+' • remaining '+fmtHMS(tLeft)) : ('Reassess hourly • remaining '+fmtHMS(tLeft)); }
+    if(reg==='im4' && dueIn<=0){
+      openSheet({title:'MgSO4 dose due', kicker:'IM q4h reminder (session timer only)', html:'<p><b>5 g IM</b> (alternate buttock) if monitoring checklist is safe.</p>',
+        actions:[{label:'Given (reset 4h)', className:'btn', close:true, onClick:function(){ mgNextDue = Date.now()+4*3600*1000; }},
+                 {label:'Open module', className:'btn outline', close:false, onClick:function(){ openMg(); }}]});
+      mgNextDue = Date.now()+4*3600*1000;
+    }
+  }, 1000);
+}
+function stopMgTimer(silent){
+  if(mgTimer) clearInterval(mgTimer);
+  mgTimer=null; mgNextDue=null; mgEnd=null;
+  var badge=document.getElementById('mg-timer'); if(badge){ badge.style.display='none'; badge.textContent=''; }
+  if(!silent) window.alert('MgSO4 timer stopped.');
+}
+function openMg(){
+  openSheet({title:'MgSO4 module', kicker:'Dosing • monitoring • timer', html:mgHtml(), actions:[{label:'Close', className:'btn'}],
+    onOpen:function(){
+      document.getElementById('mg-start').addEventListener('click', startMgTimer);
+      document.getElementById('mg-stop').addEventListener('click', function(){ stopMgTimer(false); });
+    }});
+}
+document.getElementById('openMgCard').addEventListener('click', openMg);
+
+/* ===================== BP PROTOCOL ===================== */
+function openBP(){
+  openSheet({title:'Acute severe hypertension control', kicker:'Target: SBP 140–150 / DBP 90–100 mmHg', html:
+    '<div class="callout danger" style="margin-top:0"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>Treat within 30–60 minutes</h4><p>if SBP ≥160 mmHg or DBP ≥110 mmHg, confirmed on repeat.</p></div></div>'+
+    '<div class="two-col">'+
+      '<div class="card tight"><b class="small">Labetalol (IV)</b><ol class="small" style="padding-left:22px"><li>20 mg IV over 2 min → reassess 10 min</li><li>40 mg IV → reassess 10 min</li><li>80 mg IV → reassess 10 min</li><li>80 mg IV q10min PRN (max 300 mg total)</li></ol><p class="small muted">Avoid in asthma, bradycardia, decompensated heart failure.</p></div>'+
+      '<div class="card tight"><b class="small">Hydralazine (IV)</b><ol class="small" style="padding-left:22px"><li>5–10 mg IV over 2 min → reassess 20 min</li><li>Repeat 5–10 mg q20min (max 20 mg)</li></ol><p class="small muted">Watch for reflex tachycardia and headache mimicking worsening PE.</p></div>'+
+      '<div class="card tight"><b class="small">Nifedipine (PO, immediate-release)</b><ol class="small" style="padding-left:22px"><li>10 mg PO → reassess 20 min</li><li>Repeat 10–20 mg q20min (per local protocol)</li></ol><p class="small muted">Useful when IV access is delayed.</p></div>'+
+      '<div class="card tight"><b class="small">Avoid</b><ul class="small" style="padding-left:22px"><li>ACE inhibitors / ARBs (fetotoxic)</li><li>Sodium nitroprusside (cyanide/thiocyanate toxicity risk) except as a last resort</li></ul></div>'+
+    '</div>',
+    actions:[{label:'Close', className:'btn'}]});
+}
+document.getElementById('openBpCard').addEventListener('click', openBP);
+
+/* ===================== EMERGENCY ===================== */
+function openEmergency(){
+  openSheet({title:'Emergency — eclampsia / severe PE', kicker:'ABC → BP control → MgSO4 → referral', html:
+    '<div class="card tight"><b class="small">A · B · C</b><ol class="small" style="padding-left:22px"><li><b>Airway:</b> lateral position, suction if needed, protect airway during seizure.</li><li><b>Breathing:</b> supplemental oxygen if hypoxic; monitor RR.</li><li><b>Circulation:</b> IV access ×2, cautious fluids, check glucose if seizure.</li></ol></div>'+
+    '<div class="callout warn"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>BP control</h4><p>Treat if SBP ≥160 or DBP ≥110. Use labetalol IV or nifedipine PO.</p></div></div>'+
+    '<div class="callout danger"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-alert"/></svg><div><h4>MgSO4</h4><p>Give for severe pre-eclampsia or eclampsia; continue through delivery and 24h postpartum. Monitor RR, reflexes, urine output.</p></div></div>'+
+    '<div class="callout info"><svg class="icon ic" viewBox="0 0 24 24"><use href="#ic-info"/></svg><div><h4>Referral</h4><p>Urgent transfer; communicate severity and treatment already given. Transport left-lateral with a secured IV line, monitoring BP/RR en route.</p></div></div>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="emg-bp">BP protocol</button><button class="btn sm outline" id="emg-mg">MgSO4</button></div>',
+    actions:[{label:'Close', className:'btn'}],
+    onOpen:function(){
+      document.getElementById('emg-bp').addEventListener('click', openBP);
+      document.getElementById('emg-mg').addEventListener('click', openMg);
+    }});
+}
+document.getElementById('fabEmergency').addEventListener('click', openEmergency);
+
+})();
+</script>
+
+<script>
+// Register service worker for offline use and PWABuilder / APK packaging.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function (error) {
+      console.warn('Ethio ANC service worker registration failed:', error);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
