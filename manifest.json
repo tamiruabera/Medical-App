@@ -5,6 +5,10 @@
   "id": "/Medical-App/",
   "start_url": "/Medical-App/",
   "scope": "/Medical-App/",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FBFAF6",
@@ -17,6 +21,15 @@
   ],
   "lang": "en",
   "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.tamiruabera.ethioanc",
+      "url": "https://play.google.com/store/apps/details?id=com.tamiruabera.ethioanc"
+    }
+  ],
+  "iarc_rating_id": "00000000-0000-0000-0000-000000000000",
   "icons": [
     {
       "src": "icons/icon-48x48.png",

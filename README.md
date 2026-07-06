@@ -1,39 +1,15 @@
-# Medical-App PWABuilder icon-fixed package
+# Medical-App PWABuilder information items fixed
 
-This version fixes PWABuilder errors related to:
-
-- icon MIME/type declarations
-- icon size declarations
-- shortcut icon links
-- shortcut icon dimensions
-- missing screenshots warning
-
-Upload the contents of this folder directly into the root of:
-
+Upload the CONTENTS of this folder to the root of your GitHub repository:
 https://github.com/tamiruabera/Medical-App
 
-Required structure:
+This version specifically addresses the PWABuilder information items:
+- prefer_related_applications: false
+- related_applications with Android package ID: com.tamiruabera.ethioanc
+- iarc_rating_id placeholder
+- display_override
 
-```text
-Medical-App/
-├── index.html
-├── manifest.json
-├── sw.js
-├── offline.html
-├── README.md
-├── .nojekyll
-├── icons/
-└── screenshots/
-```
+Important: iarc_rating_id is a placeholder. For final store submission, replace it with the real IARC ID provided during store rating submission.
 
-Then test:
-
-- https://tamiruabera.github.io/Medical-App/manifest.json
-- https://tamiruabera.github.io/Medical-App/icons/icon-192x192.png
-- https://tamiruabera.github.io/Medical-App/icons/icon-512x512.png
-- https://tamiruabera.github.io/Medical-App/icons/maskable-512x512.png
-- https://tamiruabera.github.io/Medical-App/screenshots/screenshot-mobile.png
-
-Scan this exact URL in PWABuilder:
-
+Scan this exact URL:
 https://tamiruabera.github.io/Medical-App/
