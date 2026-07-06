@@ -2,9 +2,9 @@
   "name": "Ethio ANC — Antenatal Care Companion",
   "short_name": "Ethio ANC",
   "description": "Offline antenatal care companion with gestational age, EDD, Ethiopian/Gregorian calendar conversion, WHO ANC contacts, danger signs, GDM thresholds, and HDP toolkit.",
-  "id": "./",
-  "start_url": "./",
-  "scope": "./",
+  "id": "/Medical-App/",
+  "start_url": "/Medical-App/",
+  "scope": "/Medical-App/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FBFAF6",
@@ -19,61 +19,67 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "./icons/icon-48x48.png",
+      "src": "icons/icon-48x48.png",
       "sizes": "48x48",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-72x72.png",
+      "src": "icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-96x96.png",
+      "src": "icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-128x128.png",
+      "src": "icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-144x144.png",
+      "src": "icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-152x152.png",
+      "src": "icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-192x192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-384x384.png",
+      "src": "icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512x512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512x512.png",
+      "src": "icons/maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -83,12 +89,14 @@
     {
       "name": "Dating Calculator",
       "short_name": "Calculator",
-      "description": "Open the GA and EDD calculator",
-      "url": "./#screen-calc",
+      "description": "Open the gestational age and EDD calculator",
+      "url": "/Medical-App/#screen-calc",
       "icons": [
         {
-          "src": "./icons/icon-192x192.png",
-          "sizes": "192x192"
+          "src": "icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
         }
       ]
     },
@@ -96,13 +104,31 @@
       "name": "Danger Signs",
       "short_name": "Alerts",
       "description": "Open pregnancy danger signs and screening",
-      "url": "./#screen-alerts",
+      "url": "/Medical-App/#screen-alerts",
       "icons": [
         {
-          "src": "./icons/icon-192x192.png",
-          "sizes": "192x192"
+          "src": "icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
         }
       ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/screenshot-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Ethio ANC mobile screenshot"
+    },
+    {
+      "src": "screenshots/screenshot-wide.png",
+      "sizes": "960x540",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Ethio ANC wide screenshot"
     }
   ]
 }

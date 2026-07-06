@@ -6,11 +6,12 @@
 <title>Ethio ANC — Antenatal Care Companion</title>
 <meta name="theme-color" content="#0B6E4F"/>
 <meta name="description" content="Antenatal care calculator and clinical reference"/>
-<!-- PWA / APK packaging setup -->
-<link rel="canonical" href="./" />
-<link rel="manifest" href="./manifest.json" />
-<link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
+<!-- PWA / APK packaging setup for GitHub Pages project path: /Medical-App/ -->
+<link rel="canonical" href="https://tamiruabera.github.io/Medical-App/" />
+<link rel="manifest" href="/Medical-App/manifest.json" crossorigin="use-credentials" />
+<link rel="icon" type="image/png" sizes="32x32" href="/Medical-App/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/Medical-App/icons/icon-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/Medical-App/icons/apple-touch-icon.png" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Ethio ANC" />
@@ -1237,7 +1238,7 @@ document.getElementById('fabEmergency').addEventListener('click', openEmergency)
 // Register service worker for offline use and PWABuilder / APK packaging.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js').catch(function (error) {
+    navigator.serviceWorker.register('/Medical-App/sw.js', { scope: '/Medical-App/' }).catch(function (error) {
       console.warn('Ethio ANC service worker registration failed:', error);
     });
   });
