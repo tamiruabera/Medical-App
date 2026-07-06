@@ -1,4 +1,4 @@
-# Ethio ANC — PWA / GitHub Pages / APK Ready
+# Ethio ANC
 
 Ethio ANC is an antenatal care companion designed to run as a Progressive Web App and to be packaged as an Android APK using PWABuilder after publishing online.
 
